@@ -259,14 +259,14 @@
         app.controller(
             'personalityCtrl',
             [
-                '$scope', '$http',
-                function ($scope, $http) {
+                '$scope', '$http', '$location',
+                function ($scope, $http, $location) {
+                    var host = $location.host();
                     $scope.getValue = function (item) {
                         $("#review").css("display", "block");
                         $scope.review = item.reviewText;
                         var review = item.reviewText;
-
-                        $http.post("https://abi-nodered.mybluemix.net/personality", {review: review}).success(function (data) {
+                        $http.post("https://"+host+"/personality", {review: review}).success(function (data) {
                             result = {};
                             result.name = item.reviewerName;
                             result.percentile = "NA";
@@ -292,12 +292,12 @@
                     };
 
 
-                    $http.get("https://abi-nodered.mybluemix.net/reviews").success(function (data) {
+                    $http.get("https://"+host+"/reviews").success(function (data) {
                         $scope.list = data;
                     });
 
                     var callCloud = function (data) {
-                        $http.post("https://abi-nodered.mybluemix.net/wordcloud", {wordcloud: data}).success(function (result) {
+                        $http.post("https://"+host+"/wordcloud", {wordcloud: data}).success(function (result) {
                             personality_words = result.personality;
                             values_words = result.needs;
                             needs_words = result.values;
