@@ -1,0 +1,48 @@
+var data = msg.payload
+var personality_words = []
+var personality = data.personality;
+for (var index in personality){
+	var new_word = {}
+	var index_name = personality[index].name
+	var index_percentile = personality[index].percentile
+	var index_children = personality[index].children
+	new_word['text'] = index_name
+	new_word['weight'] = index_percentile
+	personality_words.push(new_word)
+	for (var child in index_children) {
+		var new_word = {}
+		var index_name = index_children[child].name
+		var index_percentile = index_children[child].percentile
+		new_word['text'] = index_name
+		new_word['weight'] = index_percentile
+		personality_words.push(new_word)
+	}
+}
+
+var needs_words = []
+var needs = data.needs;
+for (var index in needs){
+	var new_word = {}
+	var index_name = needs[index].name
+	var index_percentile = needs[index].percentile
+	new_word['text'] = index_name
+	new_word['weight'] = index_percentile
+	needs_words.push(new_word)
+}
+
+var values_words = []
+var values = data.values;
+for (var index in values){
+	var new_word = {}
+	var index_name = values[index].name
+	var index_percentile = values[index].percentile
+	new_word['text'] = index_name
+	new_word['weight'] = index_percentile
+	values_words.push(new_word)
+}
+var formatted_word = {};
+formatted_word.personality = personality_words;
+formatted_word.needs = needs_words;
+formatted_word.values = values_words;
+msg.payload = formatted_word;
+return msg;
